@@ -4,12 +4,17 @@
 
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Accept", "application/json")
-$category = Read-Host "What category would you like this to be about?"
+
+Write-Host "Please choose the category you want to look at?" -ForegroundColor Cyan
+$category = Read-Host
+
+Write-Host "You chose ${category}." -ForegroundColor Green
+
 $uri = "https://www.dnd5eapi.co/api/${category}/"
 
-Write-Host "You chose ${category}."
+Write-Host "Please confirm which ${category} you would like to know about" -ForegroundColor Cyan
 
-$userInput = Read-Host "Please confirm which ${category} you would like to know about"
+$userInput = Read-Host
 
 $response = Invoke-RestMethod $uri/$userInput -Method 'GET' -Headers $headers
 $response | ConvertTo-Json
