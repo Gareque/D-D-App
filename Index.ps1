@@ -26,8 +26,14 @@ function Print-Spell($Spell) {
         Write-Host "====== $($Spell.name) ======"
     
         Write-Host "Spell Level: $($Spell.level)"
-        Write-Host "Spell Name: $($Spell.name)"
-        Write-Host "Damage: $($Spell.damage.damage_at_slot_level)"
+        Write-Host "Spell Name: $($Spell.name) `n"
+        Write-Host "Damage: $($Spell.damage.damage_at_slot_level) `n"
+        Write-Host "Damage: $($Spell.damage.damage_at_character_level) `n"
+        Write-Host "Save: $($Spell.dc.dc_type.name)"
+        Write-Host "Damage on Success: $($Spell.dc.dc_success) `n"
+        Write-Host "Area of Effect: $($Spell.area_of_effect.size)"
+        Write-Host "Spell shape: $($Spell.area_of_effect.type) `n"
+        Write-Host "School of Magic: $($Spell.school.name)"
     }
 
 # Function to print monster details
