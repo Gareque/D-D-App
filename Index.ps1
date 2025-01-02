@@ -1,23 +1,55 @@
-# $uri = 'https://www.dnd5eapi.co/api/'
-
-# $userCategory = Read-Host "What category would you like to call?"
-
+# Define Headers
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Accept", "application/json")
 
-# Setting the category to be pulled from
-Write-Host "Please choose the category you want to look at?" -ForegroundColor Cyan
-$category = Read-Host
+# Defining the base URL:
+$baseUri = "https://www.dnd5eapi.co/api"
 
-Write-Host "You chose ${category}." -ForegroundColor Green
+# Function to call spells:
+function Get-Spell($spellName, $baseUri) {
+    $uri = "$baseUri/spells/$spellName"
+    $resp = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers
+    $spell = $resp.Content | ConvertFrom-Json
+    return $spell
+}
 
-# Setting the URI for the API call
-$uri = "https://www.dnd5eapi.co/api/${category}/"
+# Function to call monsters
+function Get-Monster($monsterName, $baseUri) {
+    $uri = "$baseUri/monsters/$monsterName"
+    $resp = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers
+    $monster = $resp.Content | ConvertFrom-Json
+    return $monster
+}
 
-# Confirming the sub-category to call from
-Write-Host "Please confirm which ${category} you would like to know about" -ForegroundColor Cyan
+# Function to print the spell details
+function Print-Spell($Spell) {
+        Write-Host "====== $($Spell.name) ======"
+    
+        Write-Host "Spell Level: $($Spell.level)"
+        Write-Host "Spell Name: $($Spell.name)"
+        Write-Host "Damage: $($Spell.damage.damage_at_slot_level)"
+    }
 
-$userInput = Read-Host
+# Function to print monster details
+function Print-Monster($monster) {
+    Write-Host "====== $($monster.name) ======"
+    Write-Host "Monster Type: $($monster.type)"
+    Write-Host "Hit Points: $($monster.hit_points)"
+    Write-Host "Challenge Rating: $($monster.challenge_rating)"
+}
 
-$response = Invoke-RestMethod $uri/$userInput -Method 'GET' -Headers $headers
-$response | ConvertTo-Json
+# Main script
+Write-Host "Would you like to query a spell or a monster?" -ForegroundColor Cyan
+$category = Read-Host "Enter 'spell' or 'monster'"
+
+if ($category -eq 'spell') {
+    $spellName = Read-Host "Enter the spell name"
+    $spell = Get-Spell -spellName $spellName -baseUri $baseUri
+    Print-Spell -spell $spell
+} elseif ($category -eq 'monster') {
+    $monsterName = Read-Host "Enter the monster name"
+    $monster = Get-Monster -monsterName $monsterName -baseUri $baseUri
+    Print-Monster -monster $monster
+} else {
+    Write-Host "Invalid category.  Please enter 'spell' or 'monster'" -ForegroundColor Red
+}
