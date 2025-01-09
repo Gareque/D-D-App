@@ -5,10 +5,9 @@ $headers.Add("Accept", "application/json")
 # Defining the base URL:
 $baseUri = "https://www.dnd5eapi.co/api"
 
-Import-Module -Name .\spell-functions.ps1
-Import-Module -Name .\monster-functions.ps1
-
-
+# Importing the modules
+. .\spell-functions.ps1
+. .\monster-functions.ps1
 
 # Main script
 Write-Host "Would you like to query a spell or a monster?" -ForegroundColor Cyan
