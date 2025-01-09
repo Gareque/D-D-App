@@ -3,7 +3,6 @@ function Get-Monster($monsterName, $baseUri) {
     $uri = "$baseUri/monsters/$monsterName"
     $resp = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers
     $monster = $resp.Content | ConvertFrom-Json
-    $speed = resp.Content | ConvertFrom-Json
     return $monster
 }
 
@@ -21,20 +20,13 @@ function Print-Monster($monster) {
 
     Write-Host "Movement Details:" -ForegroundColor Green
         foreach ($speed in $monster.speed) {
-            if ($monster.speed -is [PSCustomObject]) {
-                    foreach ($type in $monster.speed.PSObject.Properties) {
-                    Write-Host "$($type.Name): $($type.Value)"
-                }
-            } else {
-                Write-Host "Speed: $($monster.speed)"
-            }
+           foreach ($type in $monster.speed.PSObject.Properties) {
+                Write-Host "$($type.Name): $($type.Value)"
+            }}
             # To force a line break without it happening on every line
             Write-Host " "
-        }
 
     Write-Host "Monster's stats:" -ForegroundColor Green
     Write-Host "Hit Points: $($monster.hit_points)"
     Write-Host "AC: $($monster.armor_class.value) `n"
-
-    Write-Host 
 }
